@@ -1,6 +1,6 @@
-Docker Container für linuxmuster
+##Docker Container für linuxmuster
 
 To build:
 
-./getmrbs.sh
-docker build -t image/name .
+* ./getmrbs.sh
+* docker build -t image/name .
