@@ -2,34 +2,46 @@
 set -e
 
 if [ $# -eq 0 ]; then 
-	sleep 5
-	# mysql Command
-	mycli="mysql -uroot -P$MRBS_DB_PORT -h$MRBS_DB_HOST -p$MYSQL_ROOT_PASSWORD"
+	# mysql commands with passwords and options
+	myclidbroot="mysql -uroot -P$MRBS_DB_PORT -h$MRBS_DB_HOST -p$MYSQL_ROOT_PASSWORD"
+	myclidbuser="mysql -u$MRBS_DB_USER -P$MRBS_DB_PORT -h$MRBS_DB_HOST -p$MRBS_DB_PASSWORD"
+	myclisqlshow="mysqlshow -uroot -P$MRBS_DB_PORT -h$MRBS_DB_HOST -p$MYSQL_ROOT_PASSWORD"
+
+	# Wait until db host gets available
+	dbavailable=0
+	while [ $dbavailable -eq 0 ]; do
+		sleep 2
+		$myclidbroot -e "show processlist;" > /dev/null 2>&1 && dbavailable=1
+	done
+
 	# Check if DB exists:
 	dbexists=0
-	mysqlshow -u root \
-	          -P$MRBS_DB_PORT \
-		  -h$MRBS_DB_HOST \
-		  -p$MYSQL_ROOT_PASSWORD | \
-		  sed '1,/Databases/d' | \
-		  awk '{print $2}' | grep $MRBS_DB_NAME > /dev/null 2>&1 && dbexists=1
+	$myclisqlshow | sed '1,/Databases/d' | awk '{print $2}' | grep $MRBS_DB_NAME > /dev/null 2>&1 && dbexists=1
 
 
 	if [ $dbexists -eq 0 ]; then 
-	  echo "Database $MRBS_DB_NAME does not exist."
-	  echo "Creating and initializing." 
-       	  $mycli -e "CREATE DATABASE ${MRBS_DB_NAME};"
-	  $mycli -e "CREATE USER IF NOT EXISTS ${MRBS_DB_USER}@'%' IDENTIFIED BY '${MRBS_DB_PASSWORD}';"
-	  $mycli -e "ALTER USER IF EXISTS ${MRBS_DB_USER}@'%' IDENTIFIED BY '${MRBS_DB_PASSWORD}';"
-	  $mycli -e "GRANT ALL PRIVILEGES ON ${MRBS_DB_NAME}.* TO ${MRBS_DB_USER}@'%';"
-	  $mycli -e "FLUSH PRIVILEGES;"
+		  echo "Database $MRBS_DB_NAME does not exist."
+		  echo "Creating and initializing." 
+		  $myclidbroot -e "CREATE DATABASE ${MRBS_DB_NAME};"
+		  $myclidbroot -e "CREATE USER IF NOT EXISTS ${MRBS_DB_USER}@'%' IDENTIFIED BY '${MRBS_DB_PASSWORD}';"
+		  $myclidbroot -e "ALTER USER ${MRBS_DB_USER}@'%' IDENTIFIED BY '${MRBS_DB_PASSWORD}';"
+		  $myclidbroot -e "GRANT ALL PRIVILEGES ON ${MRBS_DB_NAME}.* TO ${MRBS_DB_USER}@'%';"
+		  $myclidbroot -e "FLUSH PRIVILEGES;"
+		  # Creating tables
+		  $myclidbuser ${MRBS_DB_NAME} < /usr/share/linuxmuster-mrbs/tables.my.sql
  	 else
-	  echo "Database $MRBS_DB_NAME exists."
-	  echo "Doing nothing."
+		  echo "Database $MRBS_DB_NAME exists."
+		  echo "Setting password as specified in docker-compose.yml."
+		  $myclidbroot -e "CREATE USER IF NOT EXISTS ${MRBS_DB_USER}@'%' IDENTIFIED BY '${MRBS_DB_PASSWORD}';"
+		  $myclidbroot -e "ALTER USER ${MRBS_DB_USER}@'%' IDENTIFIED BY '${MRBS_DB_PASSWORD}';"
+		  $myclidbroot -e "GRANT ALL PRIVILEGES ON ${MRBS_DB_NAME}.* TO ${MRBS_DB_USER}@'%';"
+		  $myclidbroot -e "FLUSH PRIVILEGES;"
   	fi
 
+	# Start apache
 	apache2-foreground
 else
+	# Execute given command
 	exec "$@"
 fi
 
