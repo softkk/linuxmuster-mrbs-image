@@ -6,7 +6,7 @@ COPY locale.gen /etc/locale.gen
 COPY ldap.conf /etc/ldap/ldap.conf
 COPY linuxmuster-mrbs-entrypoint /usr/local/bin/linuxmuster-mrbs-entrypoint
 RUN apt-get update \
-    && apt-get install -y mysql-client locales libldap2-dev \
+    && apt-get install -y default-mysql-client locales libldap2-dev \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
     && docker-php-ext-install ldap \
     && docker-php-ext-install pdo pdo_mysql \
