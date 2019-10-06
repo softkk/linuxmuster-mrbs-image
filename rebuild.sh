@@ -2,6 +2,7 @@
 
 git status
 php_version=$(cat php_version.txt)
+grep $php_version Dockerfile || { echo "$php_version not in Dockerfile, please fix"; exit 1 ; }
 git commit -a -m"linuxmuster-mrbs: php version: $php_version" 
 
 docker pull php:apache
