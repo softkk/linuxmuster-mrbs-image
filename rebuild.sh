@@ -12,6 +12,10 @@ echo "Press enter to build with: docker build -t hgkvplan/linuxmuster-mrbs:$php_
 read
 docker build -t hgkvplan/linuxmuster-mrbs:$php_version-$git_log .
 docker tag hgkvplan/linuxmuster-mrbs:$php_version-$git_log hgkvplan/linuxmuster-mrbs:latest
-echo "Try if :latest works for you. Then upload using"
+echo "Try if :latest works for you. Then press enter to tag and upload using"
+echo "docker tag hgkvplan/linuxmuster-mrbs:$php_version-$git_log hgkvplan/linuxmuster-mrbs:working"
 echo "docker push hgkvplan/linuxmuster-mrbs:$php_version-$git_log ; docker push hgkvplan/linuxmuster-mrbs:latest"
+read
+docker tag hgkvplan/linuxmuster-mrbs:$php_version-$git_log hgkvplan/linuxmuster-mrbs:working
+docker push hgkvplan/linuxmuster-mrbs:$php_version-$git_log ; docker push hgkvplan/linuxmuster-mrbs:latest
 

@@ -1,3 +1,8 @@
+2019-10-21   T.Küchel  <devel@zukuul.de>
+
+	* updated 7.3.10 upstream
+	* rebuild now contains upload command after ENTER
+
 2019-10-06  T.Küchel  <devel@zukuul.de>
 
 	* updated version upstream, really use 7.3.10 in the name tag
