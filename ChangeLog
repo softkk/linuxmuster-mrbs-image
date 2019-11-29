@@ -1,0 +1,25 @@
+2019-11-29   T.Küchel  <devel@zukuul.de>
+
+	* new php upstream: 7.4.0
+
+2019-11-26   T.Küchel  <devel@zukuul.de>
+
+	* new php upstream: 7.3.12
+
+2019-10-30   T.Küchel  <devel@zukuul.de>
+
+	* new php upstream: 7.3.11
+
+2019-10-21   T.Küchel  <devel@zukuul.de>
+
+	* updated 7.3.10 upstream
+	* rebuild now contains upload command after ENTER
+
+2019-10-06  T.Küchel  <devel@zukuul.de>
+
+	* updated version upstream, really use 7.3.10 in the name tag
+
+2019-09-26  T.Küchel  <devel@zukuul.de>
+
+	* new php version upstream, fix: really use the new 7.3.9 version
+
