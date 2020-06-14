@@ -1,5 +1,5 @@
 FROM php:7.4.6-apache-buster
-COPY --chown=www-data mrbs-1.8.0/web/  /var/www/html/
+COPY --chown=www-data mrbs-1.7.3/web/  /var/www/html/
 COPY --chown=www-data auth_linuxmuster62.inc  /var/www/html/auth/
 COPY --chown=www-data auth_linuxmuster7.inc  /var/www/html/auth/
 COPY mrbs-1.7.3/tables.my.sql /usr/share/linuxmuster-mrbs/tables.my.sql
