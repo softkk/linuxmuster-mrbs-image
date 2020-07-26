@@ -1,3 +1,7 @@
+2020-07-27   T.Küchel  <devel@zukuul.de>
+
+	* new php upstream: 7.4.7, keeping old mrbs-version: 1.7.3 for now
+
 2020-06-10   T.Küchel  <devel@zukuul.de>
 
 	* new php upstream: 7.4.6, new mrbs-version: 1.8.0
