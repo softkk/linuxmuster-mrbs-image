@@ -2,7 +2,10 @@
 
 git status
 php_version=$(cat php_version.txt)
-grep $php_version Dockerfile || { echo "$php_version not in Dockerfile, please fix"; exit 1 ; }
+if ! grep $php_version Dockerfile ; then
+    echo "$php_version not in Dockerfile, fixing this";
+    sed -i "s/^FROM\ php.*/FROM php:${php_version}/" Dockerfile
+fi
 mrbs_version=$(cat mrbs_version.txt)
 grep $mrbs_version Dockerfile || { echo "$mrbs_version not in Dockerfile, please fix"; exit 1 ; }
 git commit -a -m"linuxmuster/mrbs: php version: $php_version, mrbs version: $mrbs_version" 
