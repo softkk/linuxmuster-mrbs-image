@@ -13,14 +13,16 @@ git commit -a -m"linuxmuster/mrbs: php version: $php_version, mrbs version: $mrb
 docker pull php:7-apache
 docker inspect php:7-apache | grep RepoTags -A 3
 git_log=$(git log --oneline | head -1 | cut -d " " -f 1)
+
+docker tag linuxmuster/mrbs-${mrbs_version}:latest linuxmuster/mrbs-${mrbs_version}:previous
 echo "Press enter to build with: docker build -t linuxmuster/mrbs-${mrbs_version}:$php_version-$git_log ."
 read
 docker build -t linuxmuster/mrbs-${mrbs_version}:$php_version-$git_log .
 docker tag linuxmuster/mrbs-${mrbs_version}:$php_version-$git_log linuxmuster/mrbs-${mrbs_version}:latest
-echo "Try if :latest works for you. Then press enter to tag and upload using"
-echo "docker tag linuxmuster/mrbs-${mrbs_version}:$php_version-$git_log linuxmuster/mrbs-${mrbs_version}:working"
+echo "if :latest does not work for you, go back to :previous"
+echo "if :latest does work for you, upload it using:"
 echo "docker push linuxmuster/mrbs-${mrbs_version}:$php_version-$git_log ; docker push linuxmuster/mrbs-${mrbs_version}:latest"
+echo "press enter to do that"
 read
-docker tag linuxmuster/mrbs-${mrbs_version}:$php_version-$git_log linuxmuster/mrbs-${mrbs_version}:working
 docker push linuxmuster/mrbs-${mrbs_version}:$php_version-$git_log ; docker push linuxmuster/mrbs-${mrbs_version}:latest
 
