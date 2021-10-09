@@ -1,4 +1,4 @@
-FROM php:7.4.23-apache-bullseye
+FROM php:7.4.24-apache-bullseye
 COPY --chown=www-data mrbs-1.7.3/web/  /var/www/html/
 COPY --chown=www-data auth_linuxmuster62.inc  /var/www/html/auth/
 COPY --chown=www-data auth_linuxmuster7.inc  /var/www/html/auth/
